@@ -26,16 +26,18 @@ env/
 ENV/
 .venv
 
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-
-# Environment Variables
-.env
-.env.local
+.DS_Store
 
 # Testing
 .pytest_cache/
@@ -45,16 +47,24 @@ htmlcov/
 
 # Logs
 *.log
-app.log
-
-# OS
-.DS_Store
-Thumbs.db
+logs/
 
 # MongoDB
-*.mongodb
+data/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# FastAPI
+.cache/
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 
 # Temporary files
 *.tmp
-temp/
-
+*.bak
+*.swp
+*~.nib

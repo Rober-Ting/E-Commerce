@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORS 測試工具</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        button.danger {
+            background: #f44336;
+        }
+        button.danger:hover {
+            background: #da190b;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 CORS 跨域測試工具</h1>
+        
+        <div class="info">
+            <strong>當前測試來源（Origin）:</strong><br>
+            <code id="current-origin"></code>
+        </div>
+
+        <div class="test-section">
+            <label for="api-url">API 網址：</label>
+            <input type="text" id="api-url" value="http://127.0.0.1:8000/health" placeholder="輸入要測試的 API 網址">
+            
+            <button onclick="testGet()">📡 測試 GET 請求</button>
+            <button onclick="testPost()">📤 測試 POST 請求</button>
+            <button onclick="testWithCredentials()">🔐 測試帶認證請求</button>
+            <button onclick="clearResult()" class="danger">🗑️ 清除結果</button>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // 顯示當前來源
+        document.getElementById('current-origin').textContent = window.location.origin;
+
+        async function testGet() {
+            const url = document.getElementById('api-url').value;
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.textContent = '正在發送 GET 請求...\n';
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                resultDiv.className = 'success';
+                resultDiv.textContent = `✅ 請求成功！\n\n` +
+                    `狀態碼: ${response.status}\n\n` +
+                    `響應數據:\n${JSON.stringify(data, null, 2)}\n\n` +
+                    `響應標頭:\n`;
+                
+                // 顯示 CORS 相關標頭
+                response.headers.forEach((value, key) => {
+                    if (key.toLowerCase().includes('access-control')) {
+                        resultDiv.textContent += `  ${key}: ${value}\n`;
+                    }
+                });
+                
+            } catch (error) {
+                resultDiv.className = 'error';
+                resultDiv.textContent = `❌ 請求失敗！\n\n` +
+                    `錯誤類型: ${error.name}\n` +
+                    `錯誤訊息: ${error.message}\n\n` +
+                    `💡 提示:\n` +
+                    `- 如果看到 "CORS policy" 錯誤，表示伺服器沒有允許來源 ${window.location.origin}\n` +
+                    `- 檢查 FastAPI 的 CORS 中介軟體配置\n` +
+                    `- 確保伺服器正在運行（${url}）`;
+            }
+        }
+
+        async function testPost() {
+            const url = document.getElementById('api-url').value.replace('/health', '/api/test');
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.textContent = '正在發送 POST 請求...\n';
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        test: 'CORS POST request',
+                        timestamp: new Date().toISOString()
+                    })
+                });
+                
+                const data = await response.json();
+                
+                resultDiv.className = 'success';
+                resultDiv.textContent = `✅ POST 請求成功！\n\n` +
+                    `狀態碼: ${response.status}\n\n` +
+                    `響應數據:\n${JSON.stringify(data, null, 2)}`;
+                
+            } catch (error) {
+                resultDiv.className = 'error';
+                resultDiv.textContent = `❌ POST 請求失敗！\n\n` +
+                    `錯誤: ${error.message}\n\n` +
+                    `注意: 這個端點可能不存在，這是正常的。\n` +
+                    `重點是觀察是否有 CORS 錯誤。`;
+            }
+        }
+
+        async function testWithCredentials() {
+            const url = document.getElementById('api-url').value;
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.textContent = '正在發送帶認證的請求...\n';
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    credentials: 'include',  // 發送 cookies
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer test-token-123'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                resultDiv.className = 'success';
+                resultDiv.textContent = `✅ 帶認證請求成功！\n\n` +
+                    `狀態碼: ${response.status}\n\n` +
+                    `這表示 allow_credentials=True 配置正常工作！\n\n` +
+                    `響應數據:\n${JSON.stringify(data, null, 2)}`;
+                
+            } catch (error) {
+                resultDiv.className = 'error';
+                resultDiv.textContent = `❌ 帶認證請求失敗！\n\n` +
+                    `錯誤: ${error.message}\n\n` +
+                    `如果看到 "credentials mode" 錯誤，\n` +
+                    `需要確保 allow_credentials=True 且 allow_origins 不是 "*"`;
+            }
+        }
+
+        function clearResult() {
+            document.getElementById('result').textContent = '';
+            document.getElementById('result').className = '';
+        }
+
+        // 頁面載入時提示
+        window.onload = function() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = '💡 使用說明:\n\n' +
+                '1. 確保你的 FastAPI 伺服器正在運行（http://127.0.0.1:8000）\n' +
+                '2. 使用 Python 在不同端口打開此頁面來測試跨域\n' +
+                '3. 點擊上方按鈕測試不同類型的請求\n\n' +
+                '開啟測試伺服器的命令:\n' +
+                '  python -m http.server 3000\n' +
+                '  python -m http.server 5000\n\n' +
+                '然後訪問: http://localhost:3000/test_cors.html';
+        };
+    </script>
+</body>
+</html>
+
