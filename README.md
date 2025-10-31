@@ -9,7 +9,7 @@
 ## 🚀 技術棧
 
 - **後端框架**: FastAPI
-- **資料庫**: MongoDB 6.0+
+- **資料庫**: MongoDB 8.2+
 - **資料庫驅動**: Motor (異步 PyMongo)
 - **認證**: JWT (JSON Web Tokens)
 - **密碼加密**: bcrypt
@@ -52,8 +52,8 @@ ecommerce-api/
 
 1. **Clone 專案**
    ```bash
-   git clone <repository-url>
-   cd ecommerce-api
+   git clone https://github.com/Rober-Ting/E-Commerce.git
+   cd E-Commerce
    ```
 
 2. **建立虛擬環境**
@@ -208,9 +208,26 @@ MIT License
 
 ---
 
-**專案狀態**: 🚧 開發中
+**專案狀態**: ✅ Phase 1 完成 - 基礎架構已搭建
 
-**當前版本**: v1.0.0
+**當前版本**: v0.1.0 (Phase 1)
 
-**最後更新**: 2025-10-22
+**最後更新**: 2025-10-31
+
+**GitHub**: https://github.com/Rober-Ting/E-Commerce
+
+### 開發進度
+
+- ✅ **Phase 1**: 基礎架構設置（完成）
+  - FastAPI 應用搭建
+  - MongoDB 數據庫連接
+  - 環境配置管理
+  - CORS 中介軟體
+  - 健康檢查端點
+  - 完整日誌系統
+
+- 📝 **Phase 2**: 用戶認證系統（規劃中）
+- 📝 **Phase 3**: 商品管理（規劃中）
+- 📝 **Phase 4**: 訂單系統（規劃中）
+- 📝 **Phase 5**: 數據分析（規劃中）
 
