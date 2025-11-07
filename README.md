@@ -16,6 +16,42 @@
 - **資料驗證**: Pydantic
 - **Python 版本**: 3.10+
 
+## 📚 文檔索引
+
+**完整文檔導航**: [📖 DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)
+
+### 快速鏈接
+
+- 🚀 **[快速開始](docs/01-getting-started/QUICK_START.md)** - 5 分鐘上手
+- 📖 **[如何運行](docs/01-getting-started/HOW_TO_RUN.md)** - 詳細運行指南
+- 🧪 **[測試指南](docs/03-testing/)** - Pytest 和覆蓋率
+- 🐛 **[調試指南](docs/04-debugging/)** - VS Code 調試
+- ❓ **[故障排除](docs/05-troubleshooting/TROUBLESHOOTING.md)** - 常見問題
+- 📐 **[API 設計](docs/06-api-design/)** - 完整 API 文檔
+- 📚 **[MongoDB 學習](docs/07-mongodb-learning/)** - MongoDB 教程
+- 💻 **[示例代碼](examples/)** - 可運行的示例
+
+### 文檔結構
+
+```
+docs/
+├── 01-getting-started/      # 🚀 入門指南
+├── 02-development/          # 🔨 開發進度
+├── 03-testing/              # 🧪 測試指南
+├── 04-debugging/            # 🐛 調試技巧
+├── 05-troubleshooting/      # ❓ 問題排查
+├── 06-api-design/           # 📐 API 設計和架構
+└── 07-mongodb-learning/     # 📚 MongoDB 學習
+
+examples/                     # 💻 示例代碼
+├── crud_operations.py
+├── aggregation_pipeline.py
+├── blog_system.py
+└── ecommerce_system.py
+```
+
+---
+
 ## 📁 專案結構
 
 ```
@@ -31,8 +67,10 @@ ecommerce-api/
 │   ├── services/            # 業務邏輯層
 │   ├── utils/               # 工具函數
 │   └── middleware/          # 中介軟體
-├── tests/                   # 測試
-├── scripts/                 # 腳本
+├── docs/                    # 📚 所有文檔
+├── examples/                # 💻 示例代碼
+├── tests/                   # 🧪 測試
+├── scripts/                 # 🔧 腳本
 ├── .env                     # 環境變數（不提交）
 ├── .env.example             # 環境變數範例
 ├── .gitignore

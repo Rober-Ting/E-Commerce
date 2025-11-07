@@ -42,8 +42,12 @@ ENV/
 # Testing
 .pytest_cache/
 .coverage
+.coverage.*
 htmlcov/
 .tox/
+coverage.xml
+coverage.json
+.nyc_output/
 
 # Logs
 *.log
