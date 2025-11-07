@@ -1,5 +1,19 @@
 # 🔧 常見問題排除
 
+## 📋 快速導航
+
+### 按階段查找
+- [Phase 2 問題記錄](./PHASE2_TROUBLESHOOTING.md) - 認證與用戶管理階段的所有問題
+- [模組錯誤修復](./❌_FIX_MODULE_ERROR.md) - ModuleNotFoundError 專項指南
+
+### 按問題類型查找
+- [依賴問題](#依賴相關問題) - pip install, requirements.txt
+- [數據庫問題](#數據庫連接問題) - MongoDB 連接
+- [測試問題](#測試相關問題) - pytest, coverage
+- [開發環境](#開發環境問題) - VS Code, 虛擬環境
+
+---
+
 ## ❌ 問題：ModuleNotFoundError: No module named 'app'
 
 ### 錯誤訊息
@@ -350,4 +364,60 @@ uvicorn app.main:app --reload
 **記住**：永遠使用 `uvicorn app.main:app` 來啟動 FastAPI 應用！
 
 這是標準且正確的方式！✅
+
+---
+
+## 📚 問題分類索引
+
+### 依賴相關問題
+- [Phase 2: email-validator 缺失](./PHASE2_TROUBLESHOOTING.md#問題-1-modulenotfounderror---email_validator)
+- [Phase 2: bcrypt 版本不兼容](./PHASE2_TROUBLESHOOTING.md#問題-3-attributeerror---bcrypt-版本不兼容)
+- [ModuleNotFoundError: No module named 'app'](#-問題modulenotfounderror-no-module-named-app)
+
+### 數據庫連接問題
+- MongoDB 連接失敗 - 確認服務是否啟動
+- 數據庫配置問題 - 檢查 `app/config.py`
+
+### 測試相關問題
+- [Phase 2: 測試環境未激活](./PHASE2_TROUBLESHOOTING.md#問題-5-測試環境未激活虛擬環境)
+- [Phase 2: pytest.ini 配置錯誤](./PHASE2_TROUBLESHOOTING.md#問題-6-pytestini-配置導致參數錯誤)
+- [pytest-cov 使用指南](../03-testing/COVERAGE_GUIDE.md)
+
+### 開發環境問題
+- [VS Code 調試配置](../04-debugging/VSCODE_DEBUG_GUIDE.md)
+- [虛擬環境激活問題](./PHASE2_TROUBLESHOOTING.md#問題-5-測試環境未激活虛擬環境)
+
+### 代碼錯誤
+- [Phase 2: get_database() 誤用 await](./PHASE2_TROUBLESHOOTING.md#問題-4-typeerror---get_database-誤用-await)
+- [Phase 2: bcrypt 密碼長度限制](./PHASE2_TROUBLESHOOTING.md#問題-2-valueerror---bcrypt-密碼長度限制)
+
+---
+
+## 🆘 找不到解決方案？
+
+1. **查看詳細文檔**
+   - [Phase 2 完整問題記錄](./PHASE2_TROUBLESHOOTING.md)
+   - [模組錯誤專項指南](./❌_FIX_MODULE_ERROR.md)
+
+2. **檢查日誌**
+   ```bash
+   # 查看應用日誌
+   tail -f logs/app.log
+   
+   # 查看測試輸出
+   pytest tests/ -v --tb=short
+   ```
+
+3. **查看 GitHub Issues**
+   - 搜索相似問題
+   - 創建新 Issue 描述你的問題
+
+4. **聯繫維護者**
+   - Email: [your-email@example.com]
+   - GitHub: [@Rober-Ting](https://github.com/Rober-Ting)
+
+---
+
+**最後更新**: 2025-11-07  
+**維護者**: Robert + AI Assistant
 

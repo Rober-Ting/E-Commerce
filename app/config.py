@@ -32,8 +32,14 @@ class Settings(BaseSettings):
     # CORS 配置
     ALLOWED_ORIGINS: str = "http://localhost:3000,http://localhost:8080"
 
+    # 分頁配置
     DEFAULT_PAGE_SIZE: int = 10
     MAX_PAGE_SIZE: int = 100
+    
+    # 用戶配置
+    DEFAULT_USER_ROLE: str = "customer"
+    MIN_PASSWORD_LENGTH: int = 8
+    REQUIRE_EMAIL_VERIFICATION: bool = False  # 是否需要郵箱驗證
     
     class Config:
         env_file = ".env"

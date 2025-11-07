@@ -1,2 +1,9 @@
-# API v1 Package
+"""
+API v1 路由模組
 
+包含所有 v1 版本的 API 端點
+"""
+
+from app.api.v1 import auth, users
+
+__all__ = ["auth", "users"]
