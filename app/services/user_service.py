@@ -58,12 +58,15 @@ class UserService:
             )
         
         # 創建用戶文檔
+        # 如果用戶指定了角色且不是 admin，則使用指定的角色，否則使用默認角色
+        user_role = user_data.role.value if user_data.role else settings.DEFAULT_USER_ROLE
+        
         user_dict = {
             "email": user_data.email,
             "hashed_password": hash_password(user_data.password),
             "full_name": user_data.full_name,
             "phone": user_data.phone,
-            "role": settings.DEFAULT_USER_ROLE,
+            "role": user_role,
             "is_active": True,
             "is_email_verified": False,
             "addresses": [],

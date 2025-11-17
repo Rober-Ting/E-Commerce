@@ -51,6 +51,7 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     """用戶創建（註冊）請求模型"""
     password: str = Field(..., min_length=8, max_length=100, description="密碼（至少8個字符）")
+    role: Optional[UserRole] = Field(default=None, description="用戶角色（可選：customer 或 vendor，默認為 customer）")
     
     @field_validator('password')
     @classmethod
@@ -66,13 +67,22 @@ class UserCreate(UserBase):
             raise ValueError('Password must contain at least one number')
         return v
     
+    @field_validator('role')
+    @classmethod
+    def validate_role(cls, v: Optional[UserRole]) -> Optional[UserRole]:
+        """驗證角色：不允許註冊為 admin"""
+        if v is not None and v == UserRole.ADMIN:
+            raise ValueError('Cannot register as admin. Admin accounts must be created by system administrators.')
+        return v
+    
     class Config:
         json_schema_extra = {
             "example": {
                 "email": "user@example.com",
                 "full_name": "張三",
                 "phone": "0912345678",
-                "password": "SecurePass123!"
+                "password": "SecurePass123!",
+                "role": "customer"
             }
         }
 

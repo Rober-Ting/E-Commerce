@@ -4,7 +4,7 @@
 處理用戶註冊、登入、獲取用戶信息等認證相關操作
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from app.models.user import (
@@ -17,7 +17,13 @@ from app.utils.dependencies import get_current_active_user, get_current_user
 from app.utils.security import create_access_token, create_token_response
 from app.models.user import UserInDB
 from app.database import get_database
-from app.middleware.error_handler import ValidationException, NotFoundException
+from app.middleware.error_handler import (
+    ValidationException,
+    NotFoundException,
+    UnauthorizedException,
+    ForbiddenException,
+    DatabaseException
+)
 from app.utils.logging_config import get_logger
 
 # 創建路由器
@@ -95,17 +101,14 @@ async def login(
     
     if user is None:
         logger.warning(f"登入失敗: 無效的憑證 email={credentials.email}")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
-            headers={"WWW-Authenticate": "Bearer"},
+        raise UnauthorizedException(
+            message="Incorrect email or password"
         )
     
     if not user.is_active:
         logger.warning(f"登入失敗: 用戶未啟用 user_id={user.id}")
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="User account is not active"
+        raise ForbiddenException(
+            message="User account is not active"
         )
     
     # 創建 Token
@@ -212,9 +215,9 @@ async def change_password(
     
     if not success:
         logger.error(f"密碼修改失敗: user_id={current_user.id}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to change password"
+        raise DatabaseException(
+            message="Failed to change password",
+            details={"user_id": current_user.id}
         )
     
     logger.info(f"密碼修改成功: user_id={current_user.id}")

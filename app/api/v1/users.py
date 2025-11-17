@@ -19,7 +19,7 @@ from app.models.common import (
 from app.services.user_service import UserService
 from app.utils.dependencies import require_admin, get_current_active_user
 from app.database import get_database
-from app.middleware.error_handler import NotFoundException
+from app.middleware.error_handler import NotFoundException, DatabaseException
 from app.utils.logging_config import get_logger
 
 # 創建路由器
@@ -198,10 +198,9 @@ async def delete_user(
     
     if not success:
         logger.error(f"用戶刪除失敗: user_id={user_id}")
-        from fastapi import HTTPException, status
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to delete user"
+        raise DatabaseException(
+            message="Failed to delete user",
+            details={"user_id": user_id}
         )
     
     logger.info(f"用戶刪除成功: user_id={user_id}")

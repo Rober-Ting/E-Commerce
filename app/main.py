@@ -61,10 +61,11 @@ logger.debug("✅ CORS 中介軟體設定完成")
 
 # 註冊 API 路由
 logger.debug("正在註冊 API 路由...")
-from app.api.v1 import auth, users
+from app.api.v1 import auth, users, products
 
 app.include_router(auth.router, prefix=settings.API_V1_PREFIX, tags=["Authentication"])
 app.include_router(users.router, prefix=settings.API_V1_PREFIX, tags=["User Management"])
+app.include_router(products.router, prefix=settings.API_V1_PREFIX, tags=["Product Management"])
 logger.debug("✅ API 路由註冊完成")
 
 

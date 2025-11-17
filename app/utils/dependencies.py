@@ -5,13 +5,18 @@ FastAPI 依賴注入函數
 """
 
 from typing import Optional
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from bson import ObjectId
 
 from app.utils.security import decode_access_token
 from app.models.user import UserInDB, UserRole
 from app.database import get_database
+from app.middleware.error_handler import (
+    UnauthorizedException,
+    ForbiddenException,
+    DatabaseException
+)
 
 # HTTP Bearer 認證方案
 security = HTTPBearer()
@@ -30,7 +35,8 @@ async def get_current_user(
         UserInDB: 當前用戶信息
         
     Raises:
-        HTTPException: 401 - Token 無效或用戶不存在
+        UnauthorizedException: Token 無效或用戶不存在
+        DatabaseException: 數據解析錯誤
         
     Example:
         @app.get("/protected")
@@ -42,19 +48,15 @@ async def get_current_user(
     # 解碼 Token
     payload = decode_access_token(token)
     if payload is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
+        raise UnauthorizedException(
+            message="Could not validate credentials"
         )
     
     # 獲取用戶 email（sub 是 JWT 標準字段，用於存儲用戶標識）
     email: str = payload.get("sub")
     if email is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
+        raise UnauthorizedException(
+            message="Could not validate credentials"
         )
     
     # 從數據庫獲取用戶
@@ -62,10 +64,8 @@ async def get_current_user(
     user_data = await database.users.find_one({"email": email})
     
     if user_data is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User not found",
-            headers={"WWW-Authenticate": "Bearer"},
+        raise UnauthorizedException(
+            message="User not found"
         )
     
     # 將 _id 轉換為 id
@@ -75,9 +75,9 @@ async def get_current_user(
     try:
         user = UserInDB(**user_data)
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error parsing user data: {str(e)}"
+        raise DatabaseException(
+            message="Error parsing user data",
+            details={"error": str(e), "email": email}
         )
     
     return user
@@ -96,7 +96,7 @@ async def get_current_active_user(
         UserInDB: 當前活躍用戶
         
     Raises:
-        HTTPException: 403 - 用戶未啟用
+        ForbiddenException: 用戶未啟用
         
     Example:
         @app.get("/protected")
@@ -104,9 +104,8 @@ async def get_current_active_user(
             return {"user_id": current_user.id}
     """
     if not current_user.is_active:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Inactive user"
+        raise ForbiddenException(
+            message="Inactive user"
         )
     return current_user
 
@@ -126,7 +125,7 @@ async def require_role(
         UserInDB: 當前用戶（如果有權限）
         
     Raises:
-        HTTPException: 403 - 權限不足
+        ForbiddenException: 權限不足
         
     Example:
         @app.get("/admin")
@@ -136,9 +135,8 @@ async def require_role(
             return {"admin_user": current_user.email}
     """
     if current_user.role != required_role:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=f"Requires {required_role} role"
+        raise ForbiddenException(
+            message=f"Requires {required_role} role"
         )
     return current_user
 
@@ -163,9 +161,8 @@ def require_admin():
         current_user: UserInDB = Depends(get_current_active_user)
     ) -> UserInDB:
         if current_user.role != UserRole.ADMIN:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Admin access required"
+            raise ForbiddenException(
+                message="Admin access required"
             )
         return current_user
     
@@ -192,9 +189,8 @@ def require_vendor_or_admin():
         current_user: UserInDB = Depends(get_current_active_user)
     ) -> UserInDB:
         if current_user.role not in [UserRole.VENDOR, UserRole.ADMIN]:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Vendor or admin access required"
+            raise ForbiddenException(
+                message="Vendor or admin access required"
             )
         return current_user
     

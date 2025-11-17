@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电商系统 - 商品管理 (Phase 3 Demo)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+        }
+
+        .header .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header .user-info {
+            text-align: right;
+        }
+
+        .header .user-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .header .user-role {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .product-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            transition: all 0.3s;
+        }
+
+        .product-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .product-card .product-image {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .product-card h4 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .product-card .product-category {
+            color: #667eea;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .product-card .product-price {
+            color: #dc3545;
+            font-size: 20px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .product-card .product-stock {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .product-card .product-actions {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .product-card .product-actions button {
+            flex: 1;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: #667eea;
+            color: white;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination .page-info {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .form-actions button {
+            flex: 1;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-box h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .login-box .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .product-tags {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+
+        .product-tag {
+            background: #e9ecef;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <!-- 登录遮罩 -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-box">
+            <h2>🛍️ 商品管理系统</h2>
+            <p class="subtitle">Phase 3 - 商品管理功能测试</p>
+            
+            <div id="loginMessage" class="message"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">📧 电子邮件</label>
+                    <input type="email" id="loginEmail" value="vendor@test.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">🔒 密码</label>
+                    <input type="password" id="loginPassword" value="Vendor123!" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">登录</button>
+            </form>
+
+            <p style="margin-top: 20px; font-size: 13px; color: #666; text-align: center;">
+                💡 测试账户：<br>
+                🏪 <strong>Vendor</strong>: vendor@test.com / Vendor123!<br>
+                🔐 <strong>Admin</strong>: admin@ecommerce.com / Admin123!<br>
+                或先到 <a href="frontend_demo.html" target="_blank">这里注册</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- 主界面 -->
+    <div id="mainApp" style="display: none;">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>🛍️ 商品管理系统 - Phase 3 Demo</h1>
+            <div class="user-badge">
+                <div class="user-info">
+                    <div class="user-name" id="headerUserName"></div>
+                    <div class="user-role" id="headerUserRole"></div>
+                </div>
+                <button onclick="logout()" class="btn btn-danger btn-small">登出</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- 统计卡片 -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalProducts">0</div>
+                    <div class="stat-label">📦 总商品数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalCategories">0</div>
+                    <div class="stat-label">📁 分类数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="currentPage">1</div>
+                    <div class="stat-label">📄 当前页</div>
+                </div>
+            </div>
+
+            <div class="main-grid">
+                <!-- 侧边栏 - 筛选 -->
+                <div class="sidebar">
+                    <h3>🔍 搜索与筛选</h3>
+                    
+                    <div class="filter-group">
+                        <label>搜索关键词</label>
+                        <input type="text" id="searchKeyword" placeholder="搜索商品名称、描述...">
+                    </div>
+
+                    <div class="filter-group">
+                        <label>商品分类</label>
+                        <select id="filterCategory">
+                            <option value="">全部分类</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>价格区间</label>
+                        <input type="number" id="filterMinPrice" placeholder="最低价格" min="0">
+                        <input type="number" id="filterMaxPrice" placeholder="最高价格" min="0" style="margin-top: 5px;">
+                    </div>
+
+                    <div class="filter-group">
+                        <label>商品状态</label>
+                        <select id="filterStatus">
+                            <option value="">全部状态</option>
+                            <option value="active">上架中</option>
+                            <option value="inactive">已下架</option>
+                            <option value="out_of_stock">缺货</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>排序方式</label>
+                        <select id="sortBy">
+                            <option value="created_at">创建时间</option>
+                            <option value="price">价格</option>
+                            <option value="sales_count">销量</option>
+                            <option value="rating">评分</option>
+                            <option value="views">浏览量</option>
+                            <option value="name">名称</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>排序方向</label>
+                        <select id="sortOrder">
+                            <option value="desc">降序 (高→低)</option>
+                            <option value="asc">升序 (低→高)</option>
+                        </select>
+                    </div>
+
+                    <button onclick="applyFilters()" class="btn btn-primary" style="width: 100%;">应用筛选</button>
+                    <button onclick="resetFilters()" class="btn btn-secondary btn-small" style="width: 100%; margin-top: 10px;">重置</button>
+                </div>
+
+                <!-- 主内容区 -->
+                <div class="main-content">
+                    <div id="mainMessage" class="message"></div>
+
+                    <!-- 工具栏 -->
+                    <div class="toolbar">
+                        <div class="search-box">
+                            <input type="text" id="quickSearch" placeholder="快速搜索..." onkeypress="if(event.key==='Enter') quickSearch()">
+                            <button onclick="quickSearch()" class="btn btn-primary">搜索</button>
+                        </div>
+                        <button onclick="showCreateModal()" class="btn btn-success" id="btnCreate">
+                            ➕ 创建商品
+                        </button>
+                    </div>
+
+                    <!-- 商品列表 -->
+                    <div id="productsContainer" class="products-grid"></div>
+
+                    <!-- 分页 -->
+                    <div class="pagination">
+                        <button onclick="goToPage(currentPage - 1)" id="btnPrevPage">
+                            ← 上一页
+                        </button>
+                        <span class="page-info">
+                            第 <span id="pageNumber">1</span> 页 / 共 <span id="totalPages">1</span> 页
+                        </span>
+                        <button onclick="goToPage(currentPage + 1)" id="btnNextPage">
+                            下一页 →
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 创建/编辑商品 Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <h2 id="modalTitle">🛍️ 创建商品</h2>
+            <p style="color: #666; margin-bottom: 10px; font-size: 14px;">
+                填写商品信息，标有 * 的为必填项
+            </p>
+            <button type="button" onclick="fillSampleData()" class="btn btn-secondary btn-small" style="margin-bottom: 15px;">
+                ⚡ 快速填充示例数据
+            </button>
+            
+            <form id="productForm">
+                <!-- 基本信息 -->
+                <h3 style="color: #667eea; margin: 20px 0 15px 0; font-size: 16px; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px;">
+                    📝 基本信息
+                </h3>
+                
+                <div class="form-group">
+                    <label>商品名称 *</label>
+                    <input type="text" id="productName" placeholder="例如：iPhone 15 Pro Max 256GB" required>
+                    <small style="color: #666; font-size: 12px;">清晰准确的商品名称有助于用户搜索</small>
+                </div>
+
+                <div class="form-group">
+                    <label>商品分类 *</label>
+                    <input type="text" id="productCategory" placeholder="例如：手機、筆記型電腦、平板" list="categoryList" required>
+                    <datalist id="categoryList">
+                        <option value="手機">
+                        <option value="筆記型電腦">
+                        <option value="平板">
+                        <option value="電腦配件">
+                        <option value="智能手錶">
+                        <option value="耳機音響">
+                    </datalist>
+                    <small style="color: #666; font-size: 12px;">选择或输入新分类</small>
+                </div>
+
+                <div class="form-group">
+                    <label>商品描述 *</label>
+                    <textarea id="productDescription" rows="4" placeholder="详细描述商品的特点、功能、规格等..." required></textarea>
+                    <small style="color: #666; font-size: 12px;">建议至少 50 字，详细描述能提高转化率</small>
+                </div>
+
+                <div class="form-group">
+                    <label>标签关键词</label>
+                    <input type="text" id="productTags" placeholder="例如: Apple, iPhone, 5G, 拍照">
+                    <small style="color: #666; font-size: 12px;">用逗号分隔，有助于搜索和推荐</small>
+                </div>
+
+                <!-- 价格与库存 -->
+                <h3 style="color: #667eea; margin: 20px 0 15px 0; font-size: 16px; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px;">
+                    💰 价格与库存
+                </h3>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>销售价格 (元) *</label>
+                        <input type="number" id="productPrice" step="0.01" min="0" placeholder="0.00" required>
+                        <small style="color: #666; font-size: 12px;">用户购买时的价格</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>库存数量 *</label>
+                        <input type="number" id="productStock" min="0" placeholder="0" required>
+                        <small style="color: #666; font-size: 12px;">当前可售库存</small>
+                    </div>
+                </div>
+
+                <!-- 商品媒体 -->
+                <h3 style="color: #667eea; margin: 20px 0 15px 0; font-size: 16px; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px;">
+                    📷 商品图片
+                </h3>
+
+                <div class="form-group">
+                    <label>商品图片 URL</label>
+                    <textarea id="productImages" rows="3" placeholder="每行一个图片 URL，例如：&#10;https://example.com/image1.jpg&#10;https://example.com/image2.jpg"></textarea>
+                    <small style="color: #666; font-size: 12px;">
+                        💡 建议尺寸：800x800px，支持多张图片（每行一个URL）<br>
+                        📌 常用图床：<a href="https://imgur.com" target="_blank">Imgur</a>、
+                        <a href="https://postimages.org" target="_blank">PostImages</a>
+                    </small>
+                </div>
+
+                <div class="form-group" id="imagePreview" style="display: none; margin-top: 10px;">
+                    <label>图片预览</label>
+                    <div id="imagePreviewContainer" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+                </div>
+
+                <!-- 商品状态 -->
+                <h3 style="color: #667eea; margin: 20px 0 15px 0; font-size: 16px; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px;">
+                    ⚙️ 商品设置
+                </h3>
+
+                <div class="form-group">
+                    <label>商品状态</label>
+                    <select id="productStatus">
+                        <option value="active">✅ 上架中 - 用户可以购买</option>
+                        <option value="inactive">❌ 已下架 - 暂不销售</option>
+                        <option value="out_of_stock">📦 缺货 - 暂时缺货</option>
+                    </select>
+                </div>
+
+                <!-- 操作按钮 -->
+                <div class="form-actions" style="margin-top: 30px;">
+                    <button type="button" onclick="closeModal()" class="btn btn-secondary">取消</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 2;">💾 保存商品</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ==================== 全局变量 ====================
+        const API_BASE_URL = 'http://127.0.0.1:8000';
+        let currentToken = null;
+        let currentUser = null;
+        let currentPage = 1;
+        let pageSize = 12;
+        let totalItems = 0;
+        let editingProductId = null;
+
+        // ==================== 登录相关 ====================
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    currentToken = data.data.access_token;
+                    currentUser = data.data.user;
+                    
+                    // 隐藏登录页，显示主界面
+                    document.getElementById('loginOverlay').style.display = 'none';
+                    document.getElementById('mainApp').style.display = 'block';
+                    
+                    // 更新头部用户信息
+                    document.getElementById('headerUserName').textContent = currentUser.full_name || currentUser.email;
+                    document.getElementById('headerUserRole').textContent = `角色: ${currentUser.role}`;
+                    
+                    // 检查权限，显示/隐藏创建按钮
+                    if (currentUser.role === 'customer') {
+                        document.getElementById('btnCreate').style.display = 'none';
+                    }
+                    
+                    // 加载商品列表
+                    await loadProducts();
+                    await loadCategories();
+                    
+                    showMessage('✅ 登录成功！', 'success');
+                } else {
+                    showLoginMessage('❌ ' + (data.error?.message || '登录失败'), 'error');
+                }
+            } catch (error) {
+                showLoginMessage('❌ 连接服务器失败', 'error');
+                console.error('登录错误:', error);
+            }
+        });
+
+        function logout() {
+            currentToken = null;
+            currentUser = null;
+            document.getElementById('loginOverlay').style.display = 'flex';
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
+
+        function showLoginMessage(text, type) {
+            const msg = document.getElementById('loginMessage');
+            msg.textContent = text;
+            msg.className = `message ${type} show`;
+        }
+
+        function showMessage(text, type) {
+            const msg = document.getElementById('mainMessage');
+            msg.textContent = text;
+            msg.className = `message ${type} show`;
+            setTimeout(() => {
+                msg.classList.remove('show');
+            }, 3000);
+        }
+
+        // ==================== 商品加载 ====================
+        async function loadProducts(filters = {}) {
+            try {
+                // 构建查询参数
+                const params = new URLSearchParams({
+                    page: currentPage,
+                    page_size: pageSize
+                });
+
+                if (filters.search) params.append('search', filters.search);
+                if (filters.category) params.append('category', filters.category);
+                if (filters.min_price) params.append('min_price', filters.min_price);
+                if (filters.max_price) params.append('max_price', filters.max_price);
+                if (filters.status) params.append('status', filters.status);
+                if (filters.sort_by) params.append('sort_by', filters.sort_by);
+                if (filters.order) params.append('order', filters.order);
+
+                const response = await fetch(`${API_BASE_URL}/api/v1/products?${params}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayProducts(data.data.items);
+                    updatePagination(data.data);
+                    updateStats(data.data);
+                } else {
+                    showMessage('❌ 加载商品失败', 'error');
+                }
+            } catch (error) {
+                showMessage('❌ 连接服务器失败', 'error');
+                console.error('加载商品错误:', error);
+            }
+        }
+
+        function displayProducts(products) {
+            const container = document.getElementById('productsContainer');
+            
+            if (products.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="icon">📦</div>
+                        <h3>暂无商品</h3>
+                        <p>试试创建第一个商品吧！</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-image">${getProductIcon(product.category)}</div>
+                    <div class="product-category">${product.category}</div>
+                    <h4>${product.name}</h4>
+                    <p style="font-size: 12px; color: #666; margin: 5px 0;">${truncate(product.description, 50)}</p>
+                    
+                    ${product.tags && product.tags.length > 0 ? `
+                        <div class="product-tags">
+                            ${product.tags.slice(0, 3).map(tag => `<span class="product-tag">${tag}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="product-price">¥${product.price.toLocaleString()}</div>
+                    <div class="product-stock">
+                        库存: ${product.stock} | 
+                        销量: ${product.sales_count || 0} | 
+                        浏览: ${product.views || 0}
+                    </div>
+                    
+                    ${currentUser && (currentUser.role === 'admin' || currentUser.role === 'vendor') ? `
+                        <div class="product-actions">
+                            <button onclick="viewProduct('${product.id}')" class="btn btn-primary btn-small">查看</button>
+                            <button onclick="editProduct('${product.id}')" class="btn btn-secondary btn-small">编辑</button>
+                            <button onclick="deleteProduct('${product.id}')" class="btn btn-danger btn-small">删除</button>
+                        </div>
+                    ` : `
+                        <button onclick="viewProduct('${product.id}')" class="btn btn-primary" style="width: 100%;">查看详情</button>
+                    `}
+                </div>
+            `).join('');
+        }
+
+        function getProductIcon(category) {
+            const icons = {
+                '筆記型電腦': '💻',
+                'Laptop': '💻',
+                'Phone': '📱',
+                '手機': '📱',
+                '平板': '📱',
+                '電腦': '🖥️',
+                '配件': '🎧',
+                '其他': '📦'
+            };
+            return icons[category] || '📦';
+        }
+
+        function truncate(str, length) {
+            return str.length > length ? str.substring(0, length) + '...' : str;
+        }
+
+        function updatePagination(data) {
+            totalItems = data.pagination.total;
+            const totalPages = data.pagination.total_pages;
+            
+            document.getElementById('pageNumber').textContent = currentPage;
+            document.getElementById('totalPages').textContent = totalPages;
+            
+            document.getElementById('btnPrevPage').disabled = currentPage === 1;
+            document.getElementById('btnNextPage').disabled = currentPage === totalPages || totalPages === 0;
+        }
+
+        function updateStats(data) {
+            document.getElementById('totalProducts').textContent = data.pagination.total;
+            document.getElementById('currentPage').textContent = currentPage;
+        }
+
+        function goToPage(page) {
+            if (page < 1) return;
+            currentPage = page;
+            applyFilters();
+        }
+
+        // ==================== 筛选功能 ====================
+        async function applyFilters() {
+            const filters = {
+                search: document.getElementById('searchKeyword').value,
+                category: document.getElementById('filterCategory').value,
+                min_price: document.getElementById('filterMinPrice').value,
+                max_price: document.getElementById('filterMaxPrice').value,
+                status: document.getElementById('filterStatus').value,
+                sort_by: document.getElementById('sortBy').value,
+                order: document.getElementById('sortOrder').value
+            };
+
+            await loadProducts(filters);
+        }
+
+        function resetFilters() {
+            document.getElementById('searchKeyword').value = '';
+            document.getElementById('filterCategory').value = '';
+            document.getElementById('filterMinPrice').value = '';
+            document.getElementById('filterMaxPrice').value = '';
+            document.getElementById('filterStatus').value = '';
+            document.getElementById('sortBy').value = 'created_at';
+            document.getElementById('sortOrder').value = 'desc';
+            currentPage = 1;
+            loadProducts();
+        }
+
+        async function quickSearch() {
+            const keyword = document.getElementById('quickSearch').value;
+            document.getElementById('searchKeyword').value = keyword;
+            currentPage = 1;
+            await applyFilters();
+        }
+
+        // ==================== 分类加载 ====================
+        async function loadCategories() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/v1/products/categories/all`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    const select = document.getElementById('filterCategory');
+                    const categories = data.data;
+                    
+                    // 清空之前的分类选项，只保留"全部分类"
+                    select.innerHTML = '<option value="">全部分类</option>';
+                    
+                    // 添加新的分类选项
+                    categories.forEach(cat => {
+                        const option = document.createElement('option');
+                        option.value = cat;
+                        option.textContent = cat;
+                        select.appendChild(option);
+                    });
+
+                    document.getElementById('totalCategories').textContent = categories.length;
+                }
+            } catch (error) {
+                console.error('加载分类错误:', error);
+            }
+        }
+
+        // ==================== 图片预览功能 ====================
+        document.getElementById('productImages').addEventListener('input', function() {
+            const imageUrls = this.value.split('\n').map(url => url.trim()).filter(url => url);
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            const previewSection = document.getElementById('imagePreview');
+            
+            if (imageUrls.length > 0) {
+                previewSection.style.display = 'block';
+                previewContainer.innerHTML = imageUrls.map(url => `
+                    <div style="position: relative;">
+                        <img src="${url}" 
+                             style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #e0e0e0;"
+                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27100%27 height=%27100%27%3E%3Crect fill=%27%23ddd%27 width=%27100%27 height=%27100%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 dominant-baseline=%27middle%27 text-anchor=%27middle%27 fill=%27%23999%27 font-size=%2712%27%3E加载失败%3C/text%3E%3C/svg%3E'"
+                             alt="商品图片">
+                    </div>
+                `).join('');
+            } else {
+                previewSection.style.display = 'none';
+            }
+        });
+
+        // ==================== 快速填充示例数据 ====================
+        function fillSampleData() {
+            const samples = [
+                {
+                    name: 'MacBook Pro 14" M3 Pro 芯片',
+                    category: '筆記型電腦',
+                    description: 'Apple M3 Pro 芯片，具有 11 核中央处理器和 14 核图形处理器\n18GB 统一内存\n512GB 固态硬盘\n14.2 英寸 Liquid Retina XDR 显示屏\n三个 Thunderbolt 4 端口，HDMI 端口，SDXC 卡插槽，MagSafe 3 端口\n背光妙控键盘，配备触控 ID - 中文（拼音）',
+                    price: 16999,
+                    stock: 50,
+                    tags: 'Apple, MacBook, M3, 笔记本电脑, 专业工作站',
+                    images: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800\nhttps://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800',
+                    status: 'active'
+                },
+                {
+                    name: 'iPhone 15 Pro Max 256GB 原色钛金属',
+                    category: '手機',
+                    description: '钛金属设计\nA17 Pro 芯片，6 核中央处理器，6 核图形处理器，16 核神经网络引擎\n6.7 英寸超视网膜 XDR 显示屏，采用 ProMotion 自适应刷新率技术\n4800 万像素主摄，支持超高分辨率照片\n1200 万像素超广角摄像头\n1200 万像素 3 倍长焦摄像头\n面容 ID\n支持 5G 网络',
+                    price: 9999,
+                    stock: 100,
+                    tags: 'Apple, iPhone, 5G, 智能手机, Pro',
+                    images: 'data:image/webp;base64,UklGRjYIAABXRUJQVlA4ICoIAACwMQCdASqTALQAPp1EnUmlqqyhKBK8yZATiWUA0Xk0EeH27oGgXOOFiv7XztOgv6w9g3ynvYN6HX7DnNAGWQO8QafrO0MSpmi/p4j0pjkNRXFhAXaYmNsE2qKtGdXRbpvEfp9NsX94tZ0EVdEW8mA6tplB5FdTrHkBVk7K3RfGB+Hbo38PI1uAKEPJ7rTjDCLLYTwiMgtec2zl8/UxyEUnKqQwBG7h89bKns9fmgO+3E+eHZL5LoUlrkPYQHP/SA48H1brcHz9tV/nCnFulqaKB2gG/Cfw7C4ChI8mfBz5dnC4zbBkA/k2iATUnrf3Jmxxe+MU054yyPVY7aVWbog5jVRYYSwl6v6c6EtGaMN2VYS4DSawlH77ldr2mxlflgF5fd47d2clUu++Rq6G8oCZM9zW1e1Z2AlQs3WAcJ9QcCRBn9zHsvmhF7d8gFShvvs5xnM4RFpkzxI8Icpo8wuarWn1IaEOvGBetdmXXZ6hctT68iDsrcZ8q9/R/+4h0Vtu5BAmtx9LNVAPauyCotadzPPQsGwAAP799zEwMYy4x4etXaLpr13OItNqcMRZhU5Vr0rKXDsscmCB/kw/Wpqtp4xRI/F1cvNo/tKiAnlGX1AoCgVfRiA6gqD/oeTnRTvW9z5yUxVBNRVSvuppEd2C1G25Ac39D2kz7Bt1C5I29Oe5QGghpfENwtESE6mtW+mx/eexhCYaFMfsMEZIV6TAfi5fModSHWT3O0MgLSnG9MIxTyUwxzKf4I+b27TbiSz02MPSKD5sZCmiBtGNYVAB17HhSHYJKH4OQjmrg5kx0aOfWwkN8YrWE5wTya/S0W9LtpwT618P2pZlZhOdOxjrzYzkCATBVrvZCCbMnZrSaG6J80/nuhWaD+7V2CEtvQilmfLsSthgFocdoTEsxrCBpyNMr0HlWbMs2i+36mbszhPrLCh9T9HOO5iVR82OIQJWi9LMv5fhNCslr+LFlNBS66+V7gXlx3O8TTtuKuC4vgGXZRr7eCQRs7hm+ryuVgY//K+FigExoGIe9sRYFUAA81tg4I7SSLJfu+lL2Xx3qcQQdynbeKQUMNmQdP+fmcMqEQikHjr5PPXuS3gMVQ2myL2GoMVE82wAivmvX2zEuet7KSMUbW/q/DGZlw+AUJIDS7Fe5wPHCK2Vv5i+S5KSgEzlqgAnf0bv112mt/ngIxdxi+WwUJbJvD4Ol4ljdm1uL3RUteOs/6fiO/Z+CKufoPv9mPalFCy7+MfOc1WoBj669YqH6SmHYtu084zab88rlVIJnTHhYmajzr7EEKyb1HNTWylXF06IxBkIAlqJOn/lrXzV/Y57nivup68IODsWHiZCX8w/rN7P9jTbPXvX2eyQiD3Do/VccBGLJnVNLU78EC4yIyhsBps+Q1WHNRyEIJjPcI92px9CNe1JqCrBRz3zyflzQhQbEueRbIR+eM4CHHj+XZRDAjzhjyQOsUj5gBtuftJtRr/+iyeXrksB9KM+eruPjiBeZNHdyl53L4oR7znGd79sFqCQfrEmUuIEZXGU4BevvNZVD5aasisB1I4Q1O5lZ3JpoX5OIdw1K+LhwZel6NOZ8kvbbNXlaouQYJPvisvqM5vcSdm77QVMw7ac65/qtdpRZ7PJE+5Rv2tCvWrflkbkrmlau+3wDc+Ygz//yYovTxO8AcZdNPFTjnRdueThjqXp2xfXiEFH/TxMQweS1jSVsJ8+P/e+tZHPrue/NECBQnkj2NjPb4pA96iWJplI40E3We8crh+2MiZBEJwWYF0qrKDSwpb+8mKPVHTubQysoBjJob3vv/uJce9Z6oiv0sW4/jNMgW4UXPQTTNP1n0rHuf5zKd4kYxzskNnjzmS5O1xvCTbz+xWMJYtrcoTKHtVDX7NgThc9Q8HUcRfx+XRXhAwkA6d3Xl6lilt84WGKiEgiX1P9zss3JLSnO1dypf03fbCf2pJxy/STBuTn3w5NEUmx5ChSIC4t/yWwEuULhg+jHwaCZwGORWZrLyVLvP8/1mZB3jDzpMHyb/+3u5H/v7zGoT9nZ/4yANfRyZxHUdgG9Vjwp5dUZh4MBQYmBB856gRfcFC1uBfv9HcYnyPFzDxPegOr6ntTGGjQHA5TyQ09f9kEm4wQ97vQ6t99OHwnLtVa0Qae4HiN+LozDg+TegmxxXhwIzRqMddnqiizjn/89rHwmp/3s7u4NIi/rhiwmKRxQGFGq4qOu3n+LiGzs+26O1laEK+oAOlyQpfc4l/VtRWC+kar2nTk2md3hgF9WvdFkdZvlXu28DVYu4oze9D9HM341nj9u3YwtxzJUSxTYvk0XCm8mAPJ9hsmVvZoxe+520gZfpERgTSC+JBY9mcPW+JgUTfg7pqEKXp/kMEgdAlmcHZodcLIOTvGgB4TxjdLVy1k2IeZSZkpg8QZ94CvBvG5JiSN/JUBYeafOqcawFvCVuLRFUU9MUvQRC0o6gfUHeptiQmO7Z3o6YCxhRApUlqvKy95K7/z3CiucznvoMt9xV5SxLclmfMH4ocV2LrxCQfAKYKonq3d7mqS9E+egE3++7h3fg5CcGvSudzlJeuOV2YzfrQzWpXrwLye43tp2/5YaDFbkilZYgShhJKqiDZZmaAVxDRx10j+uffGz2g3/CxN27alD4s9CF9LUiEDMcYB74KvuPuAuhOu/ovRdCfqKQ7DTZkp2cHqa+O0sS4nY+nyzKXhGkcvlNjMjYjyNDmN2XhfR1Xej+5eXRNb8M3leHJ0svcMfwZsOR0tYgNSbd6uAH4yphsOAAAAAA==\ndata:image/jpeg;base64,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',
+                    status: 'active'
+                },
+                {
+                    name: 'AirPods Pro (第二代) USB-C',
+                    category: '耳機音響',
+                    description: '主动降噪功能，可阻隔外界噪音\n自适应通透模式，让你自然地听到周围环境的声音\n个性化空间音频，为你带来身临其境的聆听体验\n单次充电可使用长达 6 小时，配合充电盒可使用最长达 30 小时\n轻松设置，可在你所有 Apple 设备之间即时切换\nIP54 防尘防水\n支持精确查找功能',
+                    price: 1899,
+                    stock: 200,
+                    tags: 'Apple, AirPods, 无线耳机, 降噪, 音频',
+                    images: 'https://images.unsplash.com/photo-1606841837239-c5a1a4a07af7?w=800\nhttps://images.unsplash.com/photo-1588156979435-379b9a769f0c?w=800',
+                    status: 'active'
+                },
+                {
+                    name: 'iPad Pro 12.9" M2 芯片 256GB Wi-Fi',
+                    category: '平板',
+                    description: 'Apple M2 芯片，8 核中央处理器，10 核图形处理器\n12.9 英寸 Liquid Retina XDR 显示屏\n256GB 存储容量\n1200 万像素广角摄像头，1000 万像素超广角摄像头\n1200 万像素超广角前置摄像头，支持人物居中功能\n面容 ID\n支持 Apple Pencil (第二代)\n支持妙控键盘',
+                    price: 8999,
+                    stock: 30,
+                    tags: 'Apple, iPad, 平板电脑, M2, 创意工作',
+                    images: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800\nhttps://images.unsplash.com/photo-1585790050230-5dd28404f28c?w=800',
+                    status: 'active'
+                }
+            ];
+
+            const sample = samples[Math.floor(Math.random() * samples.length)];
+            
+            document.getElementById('productName').value = sample.name;
+            document.getElementById('productCategory').value = sample.category;
+            document.getElementById('productDescription').value = sample.description;
+            document.getElementById('productPrice').value = sample.price;
+            document.getElementById('productStock').value = sample.stock;
+            document.getElementById('productTags').value = sample.tags;
+            document.getElementById('productImages').value = sample.images;
+            document.getElementById('productStatus').value = sample.status;
+            
+            // 触发图片预览
+            document.getElementById('productImages').dispatchEvent(new Event('input'));
+            
+            showMessage('✅ 已填充示例商品数据，可以直接保存或修改后保存', 'success');
+        }
+
+        // ==================== 创建/编辑商品 ====================
+        function showCreateModal() {
+            editingProductId = null;
+            document.getElementById('modalTitle').textContent = '🛍️ 创建商品';
+            document.getElementById('productForm').reset();
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('productModal').classList.add('show');
+        }
+
+        async function editProduct(productId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/v1/products/${productId}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    const product = data.data;
+                    editingProductId = productId;
+                    
+                    document.getElementById('modalTitle').textContent = '✏️ 编辑商品';
+                    document.getElementById('productName').value = product.name;
+                    document.getElementById('productDescription').value = product.description;
+                    document.getElementById('productPrice').value = product.price;
+                    document.getElementById('productStock').value = product.stock;
+                    document.getElementById('productCategory').value = product.category;
+                    document.getElementById('productTags').value = product.tags.join(', ');
+                    // 每行一个图片 URL
+                    document.getElementById('productImages').value = product.images.join('\n');
+                    document.getElementById('productStatus').value = product.status;
+                    
+                    // 触发图片预览
+                    document.getElementById('productImages').dispatchEvent(new Event('input'));
+                    
+                    document.getElementById('productModal').classList.add('show');
+                } else {
+                    showMessage('❌ 加载商品失败', 'error');
+                }
+            } catch (error) {
+                showMessage('❌ 连接服务器失败', 'error');
+                console.error('加载商品错误:', error);
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').classList.remove('show');
+            editingProductId = null;
+        }
+
+        document.getElementById('productForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // 处理图片 URL（支持换行分隔）
+            const imagesText = document.getElementById('productImages').value;
+            const imageUrls = imagesText
+                .split(/[\n,]/)  // 支持换行或逗号分隔
+                .map(url => url.trim())
+                .filter(url => url && url.startsWith('http'));
+
+            const productData = {
+                name: document.getElementById('productName').value.trim(),
+                description: document.getElementById('productDescription').value.trim(),
+                price: parseFloat(document.getElementById('productPrice').value),
+                stock: parseInt(document.getElementById('productStock').value),
+                category: document.getElementById('productCategory').value.trim(),
+                tags: document.getElementById('productTags').value
+                    .split(',')
+                    .map(t => t.trim())
+                    .filter(t => t),
+                images: imageUrls,
+                status: document.getElementById('productStatus').value
+            };
+
+            try {
+                const url = editingProductId 
+                    ? `${API_BASE_URL}/api/v1/products/${editingProductId}`
+                    : `${API_BASE_URL}/api/v1/products`;
+                
+                const method = editingProductId ? 'PUT' : 'POST';
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentToken}`
+                    },
+                    body: JSON.stringify(productData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage(`✅ 商品${editingProductId ? '更新' : '创建'}成功！`, 'success');
+                    closeModal();
+                    await loadProducts();
+                    await loadCategories();
+                } else {
+                    showMessage('❌ ' + (data.error?.message || '操作失败'), 'error');
+                }
+            } catch (error) {
+                showMessage('❌ 连接服务器失败', 'error');
+                console.error('保存商品错误:', error);
+            }
+        });
+
+        // ==================== 删除商品 ====================
+        async function deleteProduct(productId) {
+            if (!confirm('确定要删除这个商品吗？')) return;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/v1/products/${productId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage('✅ 商品删除成功！', 'success');
+                    await loadProducts();
+                } else {
+                    showMessage('❌ ' + (data.error?.message || '删除失败'), 'error');
+                }
+            } catch (error) {
+                showMessage('❌ 连接服务器失败', 'error');
+                console.error('删除商品错误:', error);
+            }
+        }
+
+        // ==================== 查看商品详情 ====================
+        async function viewProduct(productId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/v1/products/${productId}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    const product = data.data;
+                    alert(`商品详情：\n\n` +
+                        `名称: ${product.name}\n` +
+                        `描述: ${product.description}\n` +
+                        `价格: ¥${product.price}\n` +
+                        `库存: ${product.stock}\n` +
+                        `分类: ${product.category}\n` +
+                        `状态: ${product.status}\n` +
+                        `销量: ${product.sales_count || 0}\n` +
+                        `浏览: ${product.views || 0}\n` +
+                        `评分: ${product.rating || 0}\n` +
+                        `标签: ${product.tags.join(', ')}`
+                    );
+                } else {
+                    showMessage('❌ 加载商品失败', 'error');
+                }
+            } catch (error) {
+                showMessage('❌ 连接服务器失败', 'error');
+                console.error('查看商品错误:', error);
+            }
+        }
+
+        // ==================== 页面加载 ====================
+        console.log('🎉 商品管理 Demo 已加载！');
+        console.log('📡 API 地址:', API_BASE_URL);
+        console.log('💡 Phase 3 - 完整的商品管理功能测试');
+    </script>
+</body>
+</html>
+

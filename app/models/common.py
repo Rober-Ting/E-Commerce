@@ -187,6 +187,8 @@ class PaginatedData(BaseModel, Generic[T]):
         pagination: 分頁資訊
     """
     items: List[T] = Field(default_factory=list, description="資料列表")
+
+
     pagination: PaginationMeta = Field(..., description="分頁資訊")
     
     class Config:

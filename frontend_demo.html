@@ -281,15 +281,25 @@
                 </div>
                 <div class="form-group">
                     <label for="registerPassword">🔒 密码</label>
-                    <input type="password" id="registerPassword" placeholder="至少8个字符" required minlength="8">
+                    <input type="password" id="registerPassword" placeholder="至少8个字符，包含大小写和数字" required minlength="8">
                 </div>
                 <div class="form-group">
                     <label for="registerName">👤 姓名</label>
-                    <input type="text" id="registerName" placeholder="请输入您的姓名">
+                    <input type="text" id="registerName" placeholder="请输入您的姓名" required>
                 </div>
                 <div class="form-group">
                     <label for="registerPhone">📱 电话</label>
-                    <input type="tel" id="registerPhone" placeholder="例如：0912345678">
+                    <input type="tel" id="registerPhone" placeholder="例如：0912345678" pattern="09\d{8}">
+                </div>
+                <div class="form-group">
+                    <label for="registerRole">🎭 注册身份</label>
+                    <select id="registerRole" style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px;">
+                        <option value="customer">👤 顾客 (Customer)</option>
+                        <option value="vendor">🏪 商家 (Vendor)</option>
+                    </select>
+                    <small style="color: #666; font-size: 12px; margin-top: 5px; display: block;">
+                        💡 商家可以上传和管理商品
+                    </small>
                 </div>
                 <button type="submit" class="btn">注册</button>
             </form>
@@ -442,6 +452,7 @@
             const password = document.getElementById('registerPassword').value;
             const full_name = document.getElementById('registerName').value;
             const phone = document.getElementById('registerPhone').value;
+            const role = document.getElementById('registerRole').value;
 
             try {
                 const response = await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
@@ -453,7 +464,8 @@
                         email,
                         password,
                         full_name: full_name || undefined,
-                        phone: phone || undefined
+                        phone: phone || undefined,
+                        role: role  // 添加角色选择
                     })
                 });
 
