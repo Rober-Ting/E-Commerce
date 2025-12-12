@@ -6,7 +6,7 @@ PHASE 3 商品管理功能测试
 
 import pytest
 import pytest_asyncio
-from httpx import AsyncClient
+from httpx import AsyncClient, ASGITransport
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from app.main import app
@@ -16,7 +16,7 @@ from app.database import get_database
 @pytest_asyncio.fixture
 async def test_client():
     """创建测试客户端"""
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         yield client
 
 

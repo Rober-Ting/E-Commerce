@@ -43,6 +43,13 @@ examples/                     💻 示例代码
 |------|------|------|
 | [QUICK_START.md](docs/01-getting-started/QUICK_START.md) | 快速开始指南 | 5 分钟 |
 | [HOW_TO_RUN.md](docs/01-getting-started/HOW_TO_RUN.md) | 如何运行项目 | 10 分钟 |
+| [FRONTEND_SETUP.md](docs/01-getting-started/FRONTEND_SETUP.md) | 前端设置指南 | 5 分钟 |
+| [QUICK_START_FRONTEND.md](docs/01-getting-started/QUICK_START_FRONTEND.md) | 前端快速开始 | 5 分钟 |
+| [USER_ROLE_QUICK_START.md](docs/01-getting-started/USER_ROLE_QUICK_START.md) | 用户角色快速开始 | 5 分钟 |
+| [PRODUCT_MANAGEMENT_GUIDE.md](docs/01-getting-started/PRODUCT_MANAGEMENT_GUIDE.md) | 商品管理使用指南 | 15 分钟 |
+| [PHASE3_FRONTEND_DEMO_GUIDE.md](docs/01-getting-started/PHASE3_FRONTEND_DEMO_GUIDE.md) | Phase 3 前端 Demo 指南 | 10 分钟 |
+| [ORDER_MANAGEMENT_GUIDE.md](docs/01-getting-started/ORDER_MANAGEMENT_GUIDE.md) | 订单管理使用指南 | 15 分钟 |
+| [PHASE4_FRONTEND_DEMO_GUIDE.md](docs/01-getting-started/PHASE4_FRONTEND_DEMO_GUIDE.md) | Phase 4 前端 Demo 指南 | 10 分钟 |
 
 **📁 完整目录**: [docs/01-getting-started/](docs/01-getting-started/)
 
@@ -53,10 +60,24 @@ examples/                     💻 示例代码
 | 文档 | 描述 | 时间 |
 |------|------|------|
 | [PHASE1_PROGRESS.md](docs/02-development/PHASE1_PROGRESS.md) | Phase 1 开发进度追踪 | 15 分钟 |
+| [PHASE2_PROGRESS.md](docs/02-development/PHASE2_PROGRESS.md) | Phase 2 开发进度追踪 | 15 分钟 |
+| [PHASE2_COMPLETE.md](docs/02-development/PHASE2_COMPLETE.md) | Phase 2 完成总结 | 15 分钟 |
+| [PHASE3_PROGRESS.md](docs/02-development/PHASE3_PROGRESS.md) | Phase 3 开发进度追踪 | 15 分钟 |
+| [PHASE3_COMPLETE.md](docs/02-development/PHASE3_COMPLETE.md) | Phase 3 完成总结 | 15 分钟 |
+| [PHASE4_PROGRESS.md](docs/02-development/PHASE4_PROGRESS.md) | Phase 4 开发进度追踪 | 15 分钟 |
+| [PHASE4_COMPLETE.md](docs/02-development/PHASE4_COMPLETE.md) | Phase 4 完成总结 | 15 分钟 |
 | [DAY1_SUMMARY.md](docs/02-development/DAY1_SUMMARY.md) | Day 1 开发总结 | 10 分钟 |
 | [DAY2-3_COMPLETE.md](docs/02-development/DAY2-3_COMPLETE.md) | Day 2-3 完成报告 | 15 分钟 |
 | [DAY2-3_LEARNING_GUIDE.md](docs/02-development/DAY2-3_LEARNING_GUIDE.md) | Day 2-3 学习指南 | 20 分钟 |
 | [DAY4-5_COMPLETE.md](docs/02-development/DAY4-5_COMPLETE.md) | Day 4-5 完成报告 | 15 分钟 |
+| [PRODUCT_DEMO_ENHANCEMENT_SUMMARY.md](docs/02-development/PRODUCT_DEMO_ENHANCEMENT_SUMMARY.md) | 商品管理 Demo 增强总结 | 10 分钟 |
+| [PHASE4_FRONTEND_DEMO_SUMMARY.md](docs/02-development/PHASE4_FRONTEND_DEMO_SUMMARY.md) | Phase 4 前端 Demo 总结 | 10 分钟 |
+| [USER_ROLE_UPDATE_SUMMARY.md](docs/02-development/USER_ROLE_UPDATE_SUMMARY.md) | 用户角色系统更新总结 | 10 分钟 |
+| [USER_ROLE_REGISTRATION.md](docs/02-development/USER_ROLE_REGISTRATION.md) | 用户角色注册说明 | 10 分钟 |
+| [AUTH_REFACTORING_SUMMARY.md](docs/02-development/AUTH_REFACTORING_SUMMARY.md) | 认证重构总结 | 15 分钟 |
+| [DEPENDENCIES_REFACTORING_SUMMARY.md](docs/02-development/DEPENDENCIES_REFACTORING_SUMMARY.md) | 依赖注入重构总结 | 15 分钟 |
+| [ERROR_HANDLING_EXPLAINED.md](docs/02-development/ERROR_HANDLING_EXPLAINED.md) | 错误处理机制说明 | 20 分钟 |
+| [EXCEPTION_USAGE_GUIDE.md](docs/02-development/EXCEPTION_USAGE_GUIDE.md) | 异常使用指南 | 15 分钟 |
 | [TEST_CORS_GUIDE.md](docs/02-development/TEST_CORS_GUIDE.md) | CORS 测试指南 | 15 分钟 |
 
 **📁 完整目录**: [docs/02-development/](docs/02-development/)
@@ -96,6 +117,15 @@ examples/                     💻 示例代码
 |------|------|------|
 | [TROUBLESHOOTING.md](docs/05-troubleshooting/TROUBLESHOOTING.md) | 通用故障排除 | 按需 |
 | [FIX_MODULE_ERROR.md](docs/05-troubleshooting/❌_FIX_MODULE_ERROR.md) | 模块错误修复 | 按需 |
+| [PHASE2_TROUBLESHOOTING.md](docs/05-troubleshooting/PHASE2_TROUBLESHOOTING.md) | Phase 2 故障排除 | 按需 |
+| [DEBUG_FAILED_FETCH.md](docs/05-troubleshooting/DEBUG_FAILED_FETCH.md) | Failed to Fetch 错误调试 | 按需 |
+| [FIX_ADMIN_EMAIL.md](docs/05-troubleshooting/FIX_ADMIN_EMAIL.md) | 管理员邮箱验证问题 | 按需 |
+| [FIX_ROUTE_MATCHING_ISSUE.md](docs/05-troubleshooting/FIX_ROUTE_MATCHING_ISSUE.md) | 路由匹配顺序问题 | 按需 |
+| [FIX_USER_ID_FIELD.md](docs/05-troubleshooting/FIX_USER_ID_FIELD.md) | 用户 ID 字段访问问题 | 按需 |
+| [FIX_USERINDB_ATTRIBUTE_ERROR.md](docs/05-troubleshooting/FIX_USERINDB_ATTRIBUTE_ERROR.md) | UserInDB 属性错误 | 按需 |
+| [FRONTEND_ORDER_FIX.md](docs/05-troubleshooting/FRONTEND_ORDER_FIX.md) | 前端订单验证问题 | 按需 |
+| [ORDER_CREATE_EXPLANATION.md](docs/05-troubleshooting/ORDER_CREATE_EXPLANATION.md) | 订单创建代码解析 | 按需 |
+| [FINAL_ORDER_FIX_SUMMARY.md](docs/05-troubleshooting/FINAL_ORDER_FIX_SUMMARY.md) | 订单功能修复总结 | 按需 |
 
 **📁 完整目录**: [docs/05-troubleshooting/](docs/05-troubleshooting/)
 
@@ -219,15 +249,15 @@ Week 5-6: 项目实战
 
 | 类别 | 文档数 | 总字数（预估） |
 |------|--------|----------------|
-| 入门指南 | 2 | ~5,000 |
-| 开发指南 | 6 | ~30,000 |
+| 入门指南 | 9 | ~20,000 |
+| 开发指南 | 19 | ~60,000 |
 | 测试指南 | 4 | ~15,000 |
 | 调试指南 | 5 | ~20,000 |
-| 问题排查 | 2 | ~8,000 |
+| 问题排查 | 11 | ~30,000 |
 | API 设计 | 7 | ~50,000 |
 | MongoDB 学习 | 2 | ~40,000 |
 | 示例代码 | 4 | ~500 行代码 |
-| **总计** | **32** | **~168,000 字** |
+| **总计** | **61** | **~235,000 字** |
 
 ---
 
@@ -259,8 +289,8 @@ Week 5-6: 项目实战
 
 ### 文档版本
 - **创建日期**: 2025-10-22
-- **最后更新**: 2025-11-07
-- **当前版本**: v1.0.0
+- **最后更新**: 2025-11-21
+- **当前版本**: v1.2.0
 
 ### 贡献指南
 - 发现文档错误？请提 Issue
